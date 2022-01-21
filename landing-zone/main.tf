@@ -122,7 +122,7 @@ data "azurerm_resource_group" "remote_state_rg" {
 
 data "azurerm_storage_account" "remote_state" {
   resource_group_name = data.azurerm_resource_group.remote_state_rg.name
-  name = "saopentfstateastus2"
+  name                = "saopentfstateastus2"
 }
 
 resource "azurerm_key_vault_secret" "stored_remote_state_access" {
