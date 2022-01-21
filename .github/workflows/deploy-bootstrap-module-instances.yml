@@ -1,0 +1,51 @@
+name: "Deploy AZ RG Bootstrap Modules"
+on: 
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Which environment is this az rg bootstrap module workflow being run against'
+        required: true
+        default: 'dev'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  plan-bootstrap-modules:
+    name: 'plan bootstrap modules deployment'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+    env:
+      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.REMOTE_STATE_ACCESS_KEY }}
+    steps:
+      - name: 'Checkout Repo'
+        uses: actions/checkout@2
+      - name: 'Az CLI Login'
+        uses: azure/login@v1
+        with:
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+      - name: 'Get Deployer Secret'
+        id: get-deployer-secret
+        uses: azure/get-keyvault-secret@v1
+        with:
+          keyvault: ${{ secrets.DEPLOYER_KEY_VAULT }}
+          secrets: 'rgbootstrapper-deployer, saopentfstateastus2-access-key'
+      - name: 'Setup Terraform'
+        uses: hashicorp/setup-terraform@v1
+      - name: 'Terraform Init'
+        env: 
+          TF_CLI_ARGS_init: "-backend-config='resource_group_name=rg-opentfstate-eastus2' -backend-config='storage_account_name=saopentfstateastus2' -backend-config='container_name=rg-bootstrapper-state-${{ github.event.inputs.env }}' -backend-config='key=rg.terraform.tfstate'"
+        run: terraform init
+      - name: 'Terraform Validate'
+        run: terraform validate
+      - name: 'Terraform Plan'
+        env:
+          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.saopentfstateastus2-access-key }}
+          ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.rgbootstrapper-deployer }}
+        run: terraform plan -out="./landing-zone.tfplan"
