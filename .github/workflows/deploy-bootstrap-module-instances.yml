@@ -35,7 +35,7 @@ jobs:
         uses: azure/get-keyvault-secret@v1
         with:
           keyvault: ${{ secrets.DEPLOYER_KEY_VAULT }}
-          secrets: 'rgbootstrapper-deployer, saopentfstateastus2-access-key'
+          secrets: 'landing-zone-deployer, sabasetfstateastus2-access-key'
       - name: 'Setup Terraform'
         uses: hashicorp/setup-terraform@v1
       - name: 'Terraform Init'
@@ -46,6 +46,6 @@ jobs:
         run: terraform validate
       - name: 'Terraform Plan'
         env:
-          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.saopentfstateastus2-access-key }}
-          ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.rgbootstrapper-deployer }}
+          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.sabasetfstateastus2-access-key }}
+          ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.landing-zone-deployer }}
         run: terraform plan -out="./landing-zone.tfplan"

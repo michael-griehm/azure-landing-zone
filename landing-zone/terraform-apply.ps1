@@ -1,1 +1,0 @@
-terraform apply "./landing-zone.tfplan"
