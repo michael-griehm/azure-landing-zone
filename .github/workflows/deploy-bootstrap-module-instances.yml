@@ -1,4 +1,4 @@
-name: "Deploy AZ RG Bootstrap Modules"
+name: deploy-landing-zones
 on: 
   workflow_dispatch:
     inputs:
