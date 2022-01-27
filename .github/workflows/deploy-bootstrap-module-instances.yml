@@ -6,13 +6,18 @@ on:
         description: 'Which environment is this az rg bootstrap module workflow being run against'
         required: true
         default: 'dev'
+env:
+  REMOTE_STATE_RG: rg-landing-zone
+  REMOTE_STATE_SA: salandingzoneastus2
+  REMOTE_STATE_CONTAINER: landing-zone-state-${{ github.event.inputs.env }}
+  REMOTE_STATE_KEY: landing-zone.terraform.tfstate
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  plan-bootstrap-modules:
+  plan-landing-zones:
     name: 'plan bootstrap modules deployment'
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
@@ -20,7 +25,6 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      ARM_ACCESS_KEY: ${{ secrets.REMOTE_STATE_ACCESS_KEY }}
     steps:
       - name: 'Checkout Repo'
         uses: actions/checkout@2
@@ -35,17 +39,81 @@ jobs:
         uses: azure/get-keyvault-secret@v1
         with:
           keyvault: ${{ secrets.DEPLOYER_KEY_VAULT }}
-          secrets: 'rgbootstrapper-deployer, saopentfstateastus2-access-key'
+          secrets: 'landing-zone-deployer, sabasetfstateastus2-access-key'
       - name: 'Setup Terraform'
         uses: hashicorp/setup-terraform@v1
       - name: 'Terraform Init'
         env: 
-          TF_CLI_ARGS_init: "-backend-config='resource_group_name=rg-opentfstate-eastus2' -backend-config='storage_account_name=saopentfstateastus2' -backend-config='container_name=rg-bootstrapper-state-${{ github.event.inputs.env }}' -backend-config='key=rg.terraform.tfstate'"
+          TF_CLI_ARGS_init: "-backend-config='resource_group_name=$REMOTE_STATE_RG' -backend-config='storage_account_name=$REMOTE_STATE_SA' -backend-config='container_name=$REMOTE_STATE_CONTAINER' -backend-config='key=$REMOTE_STATE_KEY'"
+          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.sabasetfstateastus2-access-key }}
         run: terraform init
       - name: 'Terraform Validate'
         run: terraform validate
       - name: 'Terraform Plan'
-        env:
-          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.saopentfstateastus2-access-key }}
-          ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.rgbootstrapper-deployer }}
+        env:        
+          ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.landing-zone-deployer }}
+          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.sabasetfstateastus2-access-key }}
         run: terraform plan -out="./landing-zone.tfplan"
+      - name: 'Upload Plan'
+        uses: actions/upload-artifact@v2
+        with:
+          name: deployment-plan
+          path: ./landing-zone.tfplan
+          retention-days: 1
+      - name: 'Azure CLI logout'
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az logout
+            az cache purge
+            az account clear
+  apply-landing-zones:
+    name: 'plan bootstrap modules deployment'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.env }}
+    env:
+      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+    steps:
+      - name: 'Checkout Repo'
+        uses: actions/checkout@2
+      - name: 'Az CLI Login'
+        uses: azure/login@v1
+        with:
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+      - name: 'Get Deployer Secret'
+        id: get-deployer-secret
+        uses: azure/get-keyvault-secret@v1
+        with:
+          keyvault: ${{ secrets.DEPLOYER_KEY_VAULT }}
+          secrets: 'landing-zone-deployer, sabasetfstateastus2-access-key'
+      - name: 'Setup Terraform'
+        uses: hashicorp/setup-terraform@v1
+      - name: 'Terraform Init'
+        env: 
+          TF_CLI_ARGS_init: "-backend-config='resource_group_name=$REMOTE_STATE_RG' -backend-config='storage_account_name=$REMOTE_STATE_SA' -backend-config='container_name=$REMOTE_STATE_CONTAINER' -backend-config='key=$REMOTE_STATE_KEY'"
+          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.sabasetfstateastus2-access-key }}
+        run: terraform init
+      - name: 'Download Plan'
+        uses: actions/download-artifacts@v2
+        with:
+          name: deployment-plan
+      - name: 'Delete Plan from Repo'
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: deployment-plan
+          failOnError: false
+      - name:  'Terraform Apply'
+        run: terraform apply -auto-approve "./landing-zone.tfplan"
+      - name: 'Azure CLI logout'
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az logout
+            az cache purge
+            az account clear

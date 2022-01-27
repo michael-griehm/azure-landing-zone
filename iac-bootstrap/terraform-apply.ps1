@@ -1,0 +1,1 @@
+terraform apply "./iac-bootstrap.tfplan"
