@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: 'Which environment is this az rg bootstrap module workflow being run against'
+        description: 'The environment the landing zones deployment is being run against'
         required: true
         default: 'dev'
 env:
@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   plan-landing-zones:
-    name: 'plan bootstrap modules deployment'
+    name: 'plan landing zone deployments'
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     env:
@@ -69,7 +69,7 @@ jobs:
             az cache purge
             az account clear
   apply-landing-zones:
-    name: 'plan bootstrap modules deployment'
+    name: 'apply landing zone deployments'
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     env:
