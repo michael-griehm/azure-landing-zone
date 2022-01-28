@@ -70,6 +70,7 @@ jobs:
             az account clear
   apply-landing-zones:
     name: 'apply landing zone deployments'
+    needs: plan-landing-zones
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.env }}
     env:
