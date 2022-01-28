@@ -181,8 +181,8 @@ resource "azurerm_storage_account" "remote_state" {
   }
 }
 
-resource "azurerm_storage_container" "remote_state_container" {
-  name                  = "${var.app_name}-remote-state"
+resource "azurerm_storage_container" "dev_remote_state_container" {
+  name                  = "${var.app_name}-remote-state-dev"
   storage_account_name  = azurerm_storage_account.remote_state.name
   container_access_type = "private"
 }

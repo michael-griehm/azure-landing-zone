@@ -45,14 +45,14 @@ jobs:
       - name: 'Terraform Init'
         env: 
           TF_CLI_ARGS_init: "-backend-config='resource_group_name=$REMOTE_STATE_RG' -backend-config='storage_account_name=$REMOTE_STATE_SA' -backend-config='container_name=$REMOTE_STATE_CONTAINER' -backend-config='key=$REMOTE_STATE_KEY'"
-          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
+          ARM_ACCESS_KEY: ${{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
         run: terraform init
       - name: 'Terraform Validate'
         run: terraform validate
       - name: 'Terraform Plan'
         env:        
           ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.landing-zone-deployer }}
-          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
+          ARM_ACCESS_KEY: ${{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
         run: terraform plan -out="./landing-zone.tfplan"
       - name: 'Upload Plan'
         uses: actions/upload-artifact@v2
@@ -96,7 +96,7 @@ jobs:
       - name: 'Terraform Init'
         env: 
           TF_CLI_ARGS_init: "-backend-config='resource_group_name=$REMOTE_STATE_RG' -backend-config='storage_account_name=$REMOTE_STATE_SA' -backend-config='container_name=$REMOTE_STATE_CONTAINER' -backend-config='key=$REMOTE_STATE_KEY'"
-          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
+          ARM_ACCESS_KEY: ${{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
         run: terraform init
       - name: 'Download Plan'
         uses: actions/download-artifact@v2
@@ -109,7 +109,7 @@ jobs:
           failOnError: false
       - name:  'Terraform Apply'
         env:
-          ARM_ACCESS_KEY: $ {{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
+          ARM_ACCESS_KEY: ${{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
         run: terraform apply -auto-approve "./landing-zone.tfplan"
       - name: 'Azure CLI logout'
         uses: azure/CLI@v1
