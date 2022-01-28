@@ -27,7 +27,7 @@ jobs:
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
     steps:
       - name: 'Checkout Repo'
-        uses: actions/checkout@2
+        uses: actions/checkout@v2
       - name: 'Az CLI Login'
         uses: azure/login@v1
         with:
@@ -78,7 +78,7 @@ jobs:
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
     steps:
       - name: 'Checkout Repo'
-        uses: actions/checkout@2
+        uses: actions/checkout@v2
       - name: 'Az CLI Login'
         uses: azure/login@v1
         with:
