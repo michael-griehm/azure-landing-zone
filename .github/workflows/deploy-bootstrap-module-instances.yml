@@ -36,7 +36,7 @@ jobs:
           client-id: ${{ secrets.CLIENT_ID }}
       - name: 'Get Deployer Secret'
         id: get-deployer-secret
-        uses: azure/get-keyvault-secret@v1
+        uses: azure/get-keyvault-secrets@v1
         with:
           keyvault: ${{ secrets.DEPLOYER_KEY_VAULT }}
           secrets: 'landing-zone-deployer, sabasetfstateastus2-access-key'
@@ -87,7 +87,7 @@ jobs:
           client-id: ${{ secrets.CLIENT_ID }}
       - name: 'Get Deployer Secret'
         id: get-deployer-secret
-        uses: azure/get-keyvault-secret@v1
+        uses: azure/get-keyvault-secrets@v1
         with:
           keyvault: ${{ secrets.DEPLOYER_KEY_VAULT }}
           secrets: 'landing-zone-deployer, sabasetfstateastus2-access-key'
