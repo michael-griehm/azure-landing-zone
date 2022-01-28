@@ -110,6 +110,7 @@ jobs:
           failOnError: false
       - name:  'Terraform Apply'
         env:
+          ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.landing-zone-deployer }}
           ARM_ACCESS_KEY: ${{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
         run: terraform apply -auto-approve "./landing-zone.tfplan"
       - name: 'Azure CLI logout'
