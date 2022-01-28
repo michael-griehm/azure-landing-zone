@@ -9,7 +9,7 @@ on:
 env:
   REMOTE_STATE_RG: rg-landing-zone
   REMOTE_STATE_SA: salandingzoneastus2
-  REMOTE_STATE_CONTAINER: landing-zone-state-${{ github.event.inputs.env }}
+  REMOTE_STATE_CONTAINER: landing-zone-remote-state-${{ github.event.inputs.env }}
   REMOTE_STATE_KEY: landing-zone.terraform.tfstate
 
 permissions:
