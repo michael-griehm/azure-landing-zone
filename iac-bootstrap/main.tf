@@ -176,8 +176,7 @@ resource "azurerm_storage_account" "remote_state" {
   }
 
   network_rules {
-    default_action = "Deny"
-    ip_rules       = ["74.83.138.51", "24.31.171.98"]
+    default_action = "Allow"
   }
 }
 
