@@ -58,7 +58,7 @@ resource "azurerm_key_vault" "vault" {
   resource_group_name         = azurerm_resource_group.rg.name
   location                    = azurerm_resource_group.rg.location
   tenant_id                   = data.azurerm_client_config.current.tenant_id
-  name                        = length("kv-${var.app_name}-${substr(var.env, 0, 1)}-${subsstr(local.loc, 0, 1)}") > 24 ? substr("kv-${var.app_name}-${substr(var.env, 0, 1)}-${subsstr(local.loc, 0, 1)}", 0, 24) : "kv-${var.app_name}-${substr(var.env, 0, 1)}-${subsstr(local.loc, 0, 1)}"
+  name                        = length("kv-${var.app_name}-${substr(var.env, 0, 1)}-${subsstr(local.loc, 0, 1)}") > 24 ? substr("kv-${var.app_name}-${substr(var.env, 0, 1)}-${subsstr(local.loc, 0, 1)}", 0, 24) : "kv-${var.app_name}-${substr(var.env, 0, 1)}-${substr(local.loc, 0, 1)}"
   enabled_for_disk_encryption = true
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
