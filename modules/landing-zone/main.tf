@@ -55,6 +55,11 @@ resource "azuread_application_federated_identity_credential" "federation" {
   subject               = "repo:${var.github_organization_name}/${var.github_repo_name}:ref:refs/heads/main"
 }
 
+resource "azuread_group_member" "group_member" {
+  group_object_id  = azuread_group.group.object_id
+  member_object_id = azuread_service_principal.service_principal.object_id
+}
+
 resource "azurerm_key_vault" "vault" {
   resource_group_name         = azurerm_resource_group.rg.name
   location                    = azurerm_resource_group.rg.location
@@ -109,11 +114,6 @@ resource "azurerm_key_vault_secret" "stored_secret" {
   depends_on = [
     azurerm_key_vault_access_policy.current_deployer_acl
   ]
-}
-
-resource "azuread_group_member" "group_member" {
-  group_object_id  = azuread_group.group.object_id
-  member_object_id = azuread_service_principal.service_principal.object_id
 }
 
 resource "azurerm_storage_account" "remote_state" {
