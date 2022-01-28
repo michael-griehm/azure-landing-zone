@@ -1,5 +1,6 @@
 locals {
   loc      = lower(replace(var.location, " ", ""))
+  a_name  = replace(var.app_name, "-", "")
   rg_name  = "rg-${var.app_name}-${var.env}-${local.loc}"
 }
 
@@ -58,7 +59,7 @@ resource "azurerm_key_vault" "vault" {
   resource_group_name         = azurerm_resource_group.rg.name
   location                    = azurerm_resource_group.rg.location
   tenant_id                   = data.azurerm_client_config.current.tenant_id
-  name                        = length("kv-${var.app_name}-${substr(var.env, 0, 1)}-${subsstr(local.loc, 0, 1)}") > 24 ? substr("kv-${var.app_name}-${substr(var.env, 0, 1)}-${subsstr(local.loc, 0, 1)}", 0, 24) : "kv-${var.app_name}-${substr(var.env, 0, 1)}-${substr(local.loc, 0, 1)}"
+  name                        = "kv-${length(local.a_name) > 17 ? substr(local.a_name, 0, 17) : local.a_name}-${substr(var.location, 0, 1)}-${substr(var.env, 0, 1)}"
   enabled_for_disk_encryption = true
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
@@ -116,7 +117,7 @@ resource "azuread_group_member" "group_member" {
 }
 
 resource "azurerm_storage_account" "remote_state" {
-  name                      = "sa${length(local.a_name) > 10 ? substr(local.a_name, 0, 10) : local.a_name}${length(local.loc) > 8 ? substr(local.loc, 0, 8) : local.loc}"
+  name                      = "sa${length(local.a_name) > 20 ? substr(local.a_name, 0, 20) : loc.a_name}${substr(var.location, 0, 1)}${substr(var.env, 0, 1)}"
   resource_group_name       = azurerm_resource_group.rg.name
   location                  = azurerm_resource_group.rg.location
   account_tier              = "Standard"
@@ -131,7 +132,7 @@ resource "azurerm_storage_account" "remote_state" {
   }
 
   network_rules {
-    default_action = "Deny"
+    default_action = var.remote_state_storage_default_action
     ip_rules       = var.remote_state_storage_ip_rules
   }
 }

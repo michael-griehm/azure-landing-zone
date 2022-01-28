@@ -25,8 +25,16 @@ variable "github_repo_name" {
   description = "The name of the GitHub Repo that will host the workload that will be deployed to the Azure Landing Zone."
 }
 
+variable "remote_state_storage_default_action" {
+   type = string
+   default = "Allow"
+   sensitive = true
+   description = "The Default Network posture of the remote state Storage Account"
+}
+
 variable "remote_state_storage_ip_rules" {
    type = list
+   default = []
    sensitive = true
-   description = "The list of IP's to allow to access the Storage Account"
+   description = "The list of IP's to allow to access the remote state Storage Account"
 }
