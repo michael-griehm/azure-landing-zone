@@ -132,7 +132,7 @@ resource "azurerm_storage_account" "remote_state" {
   }
 
   network_rules {
-    default_action = "Deny"
+    default_action = var.remote_state_storage_default_action
     ip_rules       = var.remote_state_storage_ip_rules
   }
 }
