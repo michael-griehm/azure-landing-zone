@@ -32,7 +32,7 @@ resource "azurerm_role_assignment" "role-assignment" {
 }
 
 resource "azuread_application" "registration" {
-  display_name = "sp-${var.app_name}-${var.env}-${local.loc}"
+  display_name = "${var.app_name}-${var.env}-${local.loc}-deployer"
   owners = [
     data.azurerm_client_config.current.object_id
   ]
@@ -52,7 +52,7 @@ resource "azuread_application_federated_identity_credential" "federation" {
   display_name          = "github-action-deployer-federation"
   audiences             = ["api://AzureADTokenExchange"]
   issuer                = "https://token.actions.githubusercontent.com"
-  subject               = "repo:${var.github_organization_name}/${var.github_repo_name}:ref:refs/heads/main"
+  subject               = "repo:${var.github_organization_name}/${var.github_repo_name}:environment:dev"
 }
 
 resource "azuread_group_member" "group_member" {
