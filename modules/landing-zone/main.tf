@@ -100,6 +100,7 @@ resource "azurerm_key_vault_access_policy" "admin_acl" {
 
   secret_permissions = [
     "Get",
+    "List"
   ]
 
   depends_on = [
