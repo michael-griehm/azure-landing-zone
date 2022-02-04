@@ -1,7 +1,7 @@
 locals {
-  loc      = lower(replace(var.location, " ", ""))
+  loc     = lower(replace(var.location, " ", ""))
   a_name  = replace(var.app_name, "-", "")
-  rg_name  = "rg-${var.app_name}-${var.env}-${local.loc}"
+  rg_name = "rg-${var.app_name}-${var.env}-${local.loc}"
 }
 
 data "azurerm_client_config" "current" {}
@@ -14,14 +14,25 @@ provider "azuread" {
   tenant_id = data.azurerm_client_config.current.tenant_id
 }
 
+data "azuread_user" "admin" {
+  user_principal_name = var.admin_user_principal_name
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = local.rg_name
   location = var.location
+  owners = [
+    data.azurerm_client_config.current.object_id,
+    data.azuread_user.admin.object_id
+  ]
 }
 
 resource "azuread_group" "group" {
-  display_name     = "deployer-${var.app_name}-${var.env}-${local.loc}"
-  owners           = [data.azurerm_client_config.current.object_id]
+  display_name = "deployer-${var.app_name}-${var.env}-${local.loc}"
+  owners = [
+    data.azurerm_client_config.current.object_id,
+    data.azuread_user.admin.object_id
+  ]
   security_enabled = true
 }
 
@@ -34,7 +45,8 @@ resource "azurerm_role_assignment" "role-assignment" {
 resource "azuread_application" "registration" {
   display_name = "${var.app_name}-${var.env}-${local.loc}-deployer"
   owners = [
-    data.azurerm_client_config.current.object_id
+    data.azurerm_client_config.current.object_id,
+    data.azuread_user.admin.object_id
   ]
 }
 
@@ -75,6 +87,20 @@ resource "azurerm_key_vault_access_policy" "sp_acl" {
   key_vault_id = azurerm_key_vault.vault.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = azuread_service_principal.service_principal.object_id
+
+  secret_permissions = [
+    "Get",
+  ]
+
+  depends_on = [
+    azurerm_key_vault.vault
+  ]
+}
+
+resource "azurerm_key_vault_access_policy" "admin_acl" {
+  key_vault_id = azurerm_key_vault.vault.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azuread_user.admin.object_id
 
   secret_permissions = [
     "Get",
@@ -145,4 +171,10 @@ resource "azurerm_key_vault_secret" "stored_remote_state_access" {
   depends_on = [
     azurerm_key_vault_access_policy.current_deployer_acl
   ]
+}
+
+resource "azurerm_storage_container" "remote_state_container" {
+  name                  = "${var.app_name}-remote-state-${local.loc}-${var.env}"
+  storage_account_name  = azurerm_storage_account.remote_state.name
+  container_access_type = "private"
 }
