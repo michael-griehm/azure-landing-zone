@@ -21,10 +21,6 @@ data "azuread_user" "admin" {
 resource "azurerm_resource_group" "rg" {
   name     = local.rg_name
   location = var.location
-  owners = [
-    data.azurerm_client_config.current.object_id,
-    data.azuread_user.admin.object_id
-  ]
 }
 
 resource "azuread_group" "group" {
