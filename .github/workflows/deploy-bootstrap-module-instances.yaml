@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       env:
-        description: 'The environment the landing zones deployment is being run against'
+        description: 'The Target Environment of the Deployment'
         required: true
         default: 'dev'
 env:
