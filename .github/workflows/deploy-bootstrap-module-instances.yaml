@@ -35,7 +35,7 @@ jobs:
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           client-id: ${{ secrets.CLIENT_ID }}
       - name: 'Get ARM Client Secret'
-        run: echo "ARM_CLIENT_SECRET=$(az ad sp credential reset --name $ARM_CLIENT_ID --query password -o tsv)" >> $GITHUB_ENV
+        run: echo "ARM_CLIENT_SECRET=$(az ad app credential reset --id $ARM_CLIENT_ID --query password -o tsv)" >> $GITHUB_ENV
       - name: 'Get ARM Access Key'
         run: echo "ARM_ACCESS_KEY=$(az storage account keys list -g $REMOTE_STATE_RG -n $REMOTE_STATE_SA --query [0].value -o tsv)" >> $GITHUB_ENV
       - name: 'Setup Terraform'
