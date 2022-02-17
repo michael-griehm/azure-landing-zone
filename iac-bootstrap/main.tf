@@ -91,7 +91,6 @@ resource "azuread_application_federated_identity_credential" "federation" {
 resource "azurerm_resource_group" "rg" {
   name     = "rg-${var.app_name}"
   location = var.location
-  owners   = [data.azurerm_client_config.current.object_id]
 }
 
 resource "azurerm_key_vault" "vault" {
