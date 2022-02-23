@@ -23,5 +23,6 @@ module "data_model_demo_landing_zone" {
   github_repo_name          = "azure-data-engineer-DP200"
   admin_user_principal_name = "mikeg@ish-star.com"
   env                       = "demo"
+  github_bind_object        = "ref:refs/heads/main"
 }
 

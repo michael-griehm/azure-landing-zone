@@ -25,6 +25,13 @@ variable "github_repo_name" {
   description = "The name of the GitHub Repo that will host the workload that will be deployed to the Azure Landing Zone."
 }
 
+variable "github_bind_object" {
+  type        = string
+  sensitive   = true
+  description = "The GitHub branch or environment to which the federation is bound."
+  default     = "environment:dev"
+}
+
 variable "remote_state_storage_default_action" {
   type        = string
   default     = "Allow"

@@ -60,7 +60,7 @@ resource "azuread_application_federated_identity_credential" "federation" {
   display_name          = "github-action-deployer-federation"
   audiences             = ["api://AzureADTokenExchange"]
   issuer                = "https://token.actions.githubusercontent.com"
-  subject               = "repo:${var.github_organization_name}/${var.github_repo_name}:environment:dev"
+  subject               = "repo:${var.github_organization_name}/${var.github_repo_name}:${var.github_bind_object}"
 }
 
 resource "azuread_group_member" "group_member" {
