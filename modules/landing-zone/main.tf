@@ -44,6 +44,15 @@ resource "azuread_application" "registration" {
     data.azurerm_client_config.current.object_id,
     data.azuread_user.admin.object_id
   ]
+
+  required_resource_access {
+    resource_app_id = "00000003-0000-0000-c000-000000000000"  # MS Graph app id.
+
+    resource_access {
+      id   = "df021288-bdef-4463-88db-98f22de89214" # User.Read.All id.
+      type = "Role"
+    }
+  }
 }
 
 resource "azuread_service_principal" "service_principal" {
