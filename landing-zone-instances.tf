@@ -7,15 +7,6 @@ terraform {
   }
 }
 
-module "azure_function_landing_zone" {
-  source                    = "./modules/landing-zone"
-  app_name                  = "basic-func"
-  github_organization_name  = "michael-griehm"
-  github_repo_name          = "terraform-azure-function"
-  admin_user_principal_name = "mikeg@ish-star.com"
-}
-
-
 module "data_model_demo_landing_zone" {
   source                    = "./modules/landing-zone"
   app_name                  = "data-model"
