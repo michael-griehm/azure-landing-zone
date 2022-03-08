@@ -5,7 +5,7 @@ on:
       env:
         description: 'The Target Environment of the Deployment'
         required: true
-        default: 'dev'
+        default: 'demo'
 
 env:
   REMOTE_STATE_RG: rg-landing-zone
