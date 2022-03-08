@@ -28,7 +28,7 @@ module "data_model_demo_landing_zone" {
 
 module "data_brick_demo_landing_zone" {
   source                    = "./modules/landing-zone"
-  app_name                  = "data-bricks"
+  app_name                  = "bricks"
   github_organization_name  = "michael-griehm"
   github_repo_name          = "azure-data-bricks"
   admin_user_principal_name = "mikeg@ish-star.com"
