@@ -26,3 +26,12 @@ module "data_model_demo_landing_zone" {
   github_bind_object        = "ref:refs/heads/main"
 }
 
+module "data_brick_demo_landing_zone" {
+  source                    = "./modules/landing-zone"
+  app_name                  = "data-bricks"
+  github_organization_name  = "michael-griehm"
+  github_repo_name          = "azure-data-bricks"
+  admin_user_principal_name = "mikeg@ish-star.com"
+  env                       = "demo"
+  github_bind_object        = "ref:refs/heads/main"
+}
