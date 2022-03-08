@@ -6,9 +6,6 @@ on:
         description: 'The Target Environment of the Deployment'
         required: true
         default: 'dev'
-  push:
-    branches:
-      - "main"
 env:
   REMOTE_STATE_RG: rg-landing-zone
   REMOTE_STATE_SA: salandingzoneastus2
