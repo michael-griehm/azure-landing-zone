@@ -88,6 +88,14 @@ resource "azuread_application_federated_identity_credential" "federation" {
   subject               = "repo:michael-griehm/terraform-azure-landing-zone:environment:dev"
 }
 
+resource "azuread_application_federated_identity_credential" "demo-env-federation" {
+  application_object_id = azuread_application.registration.object_id
+  display_name          = "github-action-deployer-demo-env-federation"
+  audiences             = ["api://AzureADTokenExchange"]
+  issuer                = "https://token.actions.githubusercontent.com"
+  subject               = "repo:michael-griehm/terraform-azure-landing-zone:environment:demo"
+}
+
 resource "azurerm_resource_group" "rg" {
   name     = "rg-${var.app_name}"
   location = var.location

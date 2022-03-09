@@ -9,7 +9,7 @@ on:
 
 env:
   INSTANCE_NAME: analytics
-  WORKING_DIRECTORY: .instances/analytics
+  WORKING_DIRECTORY: instances/analytics
   REMOTE_STATE_RG: rg-landing-zone
   REMOTE_STATE_SA: salandingzoneastus2
   REMOTE_STATE_CONTAINER: landing-zone-remote-state-${{ github.event.inputs.env }}

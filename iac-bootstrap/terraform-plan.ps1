@@ -1,8 +1,8 @@
-Remove-Item -LiteralPath ".terraform" -Force -Recurse
+Remove-Item -LiteralPath ".terraform" -Force -Recurse -ErrorAction SilentlyContinue
 
-rm .terraform.lock.hcl
+Remove-Item -LiteralPath ".terraform.lock.hcl" -Force -ErrorAction SilentlyContinue
 
-rm iac-bootstrap.tfplan
+Remove-Item -LiteralPath "iac-bootstrap.tfplan" -Force -ErrorAction SilentlyContinue
 
 $RESOURCE_GROUP_NAME = "rg-base-tf-state-eastus2"
 $STORAGE_ACCOUNT_NAME = "sabasetfstateastus2"
