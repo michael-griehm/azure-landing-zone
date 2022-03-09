@@ -70,6 +70,10 @@ resource "azuread_application_federated_identity_credential" "federation" {
   audiences             = ["api://AzureADTokenExchange"]
   issuer                = "https://token.actions.githubusercontent.com"
   subject               = "repo:${var.github_organization_name}/${var.github_repo_name}:${var.github_bind_object}"
+
+  depends_on = [
+    azuread_service_principal.service_principal
+  ]
 }
 
 resource "azuread_group_member" "group_member" {
