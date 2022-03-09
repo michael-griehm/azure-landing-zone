@@ -1,7 +1,7 @@
 locals {
   loc     = lower(replace(var.location, " ", ""))
   a_name  = replace(var.app_name, "-", "")
-  rg_name = "rg-${var.app_name}-${var.env}-${local.loc}"
+  rg_name = "${var.app_name}-${var.env}-${local.loc}"
 }
 
 data "azurerm_client_config" "current" {}
@@ -81,7 +81,7 @@ resource "azurerm_key_vault" "vault" {
   resource_group_name         = azurerm_resource_group.rg.name
   location                    = azurerm_resource_group.rg.location
   tenant_id                   = data.azurerm_client_config.current.tenant_id
-  name                        = "kv-${length(var.app_name) > 17 ? substr(var.app_name, 0, 17) : var.app_name}-${substr(local.loc, 0, 1)}-${substr(var.env, 0, 1)}"
+  name                        = "deploy${length(local.a_name) > 16 ? substr(local.a_name, 0, 16) : local.a_name}${substr(local.loc, 0, 1)}${substr(var.env, 0, 1)}"
   enabled_for_disk_encryption = true
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
@@ -149,7 +149,7 @@ resource "azurerm_key_vault_secret" "stored_secret" {
 }
 
 resource "azurerm_storage_account" "remote_state" {
-  name                      = "sa${length(local.a_name) > 20 ? substr(local.a_name, 0, 20) : local.a_name}${substr(local.loc, 0, 1)}${substr(var.env, 0, 1)}"
+  name                      = "tf${length(local.a_name) > 20 ? substr(local.a_name, 0, 20) : local.a_name}${substr(local.loc, 0, 1)}${substr(var.env, 0, 1)}"
   resource_group_name       = azurerm_resource_group.rg.name
   location                  = azurerm_resource_group.rg.location
   account_tier              = "Standard"

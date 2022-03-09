@@ -1,4 +1,4 @@
-name: deploy-bricks
+name: deploy-dbx
 on: 
   workflow_dispatch:
     inputs:
@@ -8,7 +8,7 @@ on:
         default: 'demo'
 
 env:
-  WORKING_DIRECTORY: instances/bricks
+  WORKING_DIRECTORY: instances/dbx
   REMOTE_STATE_RG: rg-landing-zone
   REMOTE_STATE_SA: salandingzoneastus2
   REMOTE_STATE_CONTAINER: landing-zone-remote-state-${{ github.event.inputs.env }}
