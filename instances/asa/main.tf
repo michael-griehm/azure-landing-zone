@@ -9,7 +9,7 @@ terraform {
 
 module "data_stream_landing_zone" {
   source                    = "../../modules/landing-zone"
-  app_name                  = "stream"
+  app_name                  = "asa"
   github_organization_name  = "michael-griehm"
   github_repo_name          = "azure-data-streams"
   admin_user_principal_name = "mikeg@ish-star.com"
