@@ -186,6 +186,12 @@ resource "azurerm_storage_container" "dev_remote_state_container" {
   container_access_type = "private"
 }
 
+resource "azurerm_storage_container" "demo_remote_state_container" {
+  name                  = "${var.app_name}-remote-state-demo"
+  storage_account_name  = azurerm_storage_account.remote_state.name
+  container_access_type = "private"
+}
+
 resource "azurerm_key_vault_secret" "stored_remote_state_access" {
   count        = 1
   name         = "${azurerm_storage_account.remote_state.name}-access-key"

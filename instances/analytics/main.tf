@@ -7,13 +7,11 @@ terraform {
   }
 }
 
-
-
-module "data_brick_demo_landing_zone" {
-  source                    = "./modules/landing-zone"
-  app_name                  = "bricks"
+module "data_model_demo_landing_zone" {
+  source                    = "../../modules/landing-zone"
+  app_name                  = "analytics"
   github_organization_name  = "michael-griehm"
-  github_repo_name          = "azure-data-bricks"
+  github_repo_name          = "azure-data-engineering-DP203"
   admin_user_principal_name = "mikeg@ish-star.com"
   env                       = "demo"
   github_bind_object        = "ref:refs/heads/main"

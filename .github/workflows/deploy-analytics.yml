@@ -1,4 +1,4 @@
-name: deploy-landing-zones
+name: deploy-analytics
 on: 
   workflow_dispatch:
     inputs:
@@ -8,19 +8,24 @@ on:
         default: 'demo'
 
 env:
+  INSTANCE_NAME: analytics
+  WORKING_DIRECTORY: .instances/analytics
   REMOTE_STATE_RG: rg-landing-zone
   REMOTE_STATE_SA: salandingzoneastus2
   REMOTE_STATE_CONTAINER: landing-zone-remote-state-${{ github.event.inputs.env }}
-  REMOTE_STATE_KEY: landing-zone.terraform.tfstate
+  REMOTE_STATE_KEY: ${{ env.INSTANCE_NAME }}.terraform.tfstate
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  plan-landing-zones:
-    name: 'plan landing zone deployments'
+  plan:
+    name: 'plan infrastructure'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.WORKING_DIRECTORY }}
     environment: ${{ github.event.inputs.env }}
     env:
       ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
@@ -59,7 +64,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: deployment-plan
-          path: ./landing-zone.tfplan
+          path: ${{ env.WORKING_DIRECTORY }}/landing-zone.tfplan
           retention-days: 1
       - name: 'Azure CLI logout'
         uses: azure/CLI@v1
@@ -81,6 +86,17 @@ jobs:
     steps:
       - name: 'Checkout Repo'
         uses: actions/checkout@v2
+      - name: 'Download Plan'
+        uses: actions/download-artifact@v2
+        with:
+          name: deployment-plan
+      - name: 'Move Plan'
+        run: mv ./landing-zone.tfplan ${{ env.WORKING_DIRECTORY }}
+      - name: 'Delete Plan from Repo'
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: deployment-plan
+          failOnError: false
       - name: 'Az CLI Login'
         uses: azure/login@v1
         with:
@@ -96,20 +112,13 @@ jobs:
       - name: 'Setup Terraform'
         uses: hashicorp/setup-terraform@v1
       - name: 'Terraform Init'
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         env: 
           TF_CLI_ARGS_init: "-backend-config='resource_group_name=${{env.REMOTE_STATE_RG}}' -backend-config='storage_account_name=${{env.REMOTE_STATE_SA}}' -backend-config='container_name=${{env.REMOTE_STATE_CONTAINER}}' -backend-config='key=${{env.REMOTE_STATE_KEY}}'"
           ARM_ACCESS_KEY: ${{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
         run: terraform init
-      - name: 'Download Plan'
-        uses: actions/download-artifact@v2
-        with:
-          name: deployment-plan
-      - name: 'Delete Plan from Repo'
-        uses: geekyeggo/delete-artifact@v1
-        with:
-          name: deployment-plan
-          failOnError: false
       - name:  'Terraform Apply'
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         env:
           ARM_CLIENT_SECRET: ${{ steps.get-deployer-secret.outputs.landing-zone-deployer }}
           ARM_ACCESS_KEY: ${{ steps.get-deployer-secret.outputs.salandingzoneastus2-access-key }}
