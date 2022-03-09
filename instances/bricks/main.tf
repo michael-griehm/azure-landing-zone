@@ -7,10 +7,8 @@ terraform {
   }
 }
 
-
-
 module "data_brick_demo_landing_zone" {
-  source                    = "./modules/landing-zone"
+  source                    = "../../modules/landing-zone"
   app_name                  = "bricks"
   github_organization_name  = "michael-griehm"
   github_repo_name          = "azure-data-bricks"
