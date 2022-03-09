@@ -1,4 +1,4 @@
-name: deploy-analytics
+name: deploy-stream
 on: 
   workflow_dispatch:
     inputs:
@@ -8,8 +8,7 @@ on:
         default: 'demo'
 
 env:
-  INSTANCE_NAME: analytics
-  WORKING_DIRECTORY: instances/analytics
+  WORKING_DIRECTORY: instances/stream
   REMOTE_STATE_RG: rg-landing-zone
   REMOTE_STATE_SA: salandingzoneastus2
   REMOTE_STATE_CONTAINER: landing-zone-remote-state-${{ github.event.inputs.env }}

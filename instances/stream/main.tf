@@ -7,11 +7,11 @@ terraform {
   }
 }
 
-module "data_model_demo_landing_zone" {
+module "data_stream_landing_zone" {
   source                    = "../../modules/landing-zone"
-  app_name                  = "analytics"
+  app_name                  = "stream"
   github_organization_name  = "michael-griehm"
-  github_repo_name          = "azure-data-engineering-DP203"
+  github_repo_name          = "azure-data-streams"
   admin_user_principal_name = "mikeg@ish-star.com"
   env                       = "demo"
   github_bind_object        = "ref:refs/heads/main"
