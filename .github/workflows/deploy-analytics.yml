@@ -13,6 +13,7 @@ env:
   REMOTE_STATE_RG: rg-landing-zone
   REMOTE_STATE_SA: salandingzoneastus2
   REMOTE_STATE_CONTAINER: landing-zone-remote-state-${{ github.event.inputs.env }}
+  REMOTE_STATE_KEY: ${{ github.workflow }}.terraform.tfstate
 
 permissions:
   id-token: write
@@ -30,7 +31,6 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      REMOTE_STATE_KEY: ${INSTANCE_NAME}.terraform.tfstate
     steps:
       - name: 'Checkout Repo'
         uses: actions/checkout@v2
@@ -83,7 +83,6 @@ jobs:
       ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
       ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      REMOTE_STATE_KEY: ${INSTANCE_NAME}.terraform.tfstate
     steps:
       - name: 'Checkout Repo'
         uses: actions/checkout@v2
