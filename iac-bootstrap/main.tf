@@ -85,7 +85,7 @@ resource "azuread_application_federated_identity_credential" "federation" {
   display_name          = "github-action-deployer-federation"
   audiences             = ["api://AzureADTokenExchange"]
   issuer                = "https://token.actions.githubusercontent.com"
-  subject               = "repo:michael-griehm/terraform-azure-landing-zone:environment:dev"
+  subject               = "repo:michael-griehm/azure-landing-zone:environment:dev"
 }
 
 resource "azuread_application_federated_identity_credential" "demo-env-federation" {
@@ -93,7 +93,7 @@ resource "azuread_application_federated_identity_credential" "demo-env-federatio
   display_name          = "github-action-deployer-demo-env-federation"
   audiences             = ["api://AzureADTokenExchange"]
   issuer                = "https://token.actions.githubusercontent.com"
-  subject               = "repo:michael-griehm/terraform-azure-landing-zone:environment:demo"
+  subject               = "repo:michael-griehm/azure-landing-zone:environment:demo"
 }
 
 resource "azurerm_resource_group" "rg" {

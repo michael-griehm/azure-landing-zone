@@ -15,4 +15,9 @@ module "data_brick_demo_landing_zone" {
   admin_user_principal_name = "mikeg@ish-star.com"
   env                       = "demo"
   github_bind_object        = "ref:refs/heads/main"
+
+  tags = {
+    environment = "demo"
+    workload    = "crypto-analytics"
+  }
 }

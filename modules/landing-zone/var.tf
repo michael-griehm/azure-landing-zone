@@ -1,16 +1,27 @@
 variable "env" {
-  default   = "dev"
-  sensitive = false
+  type        = string
+  sensitive   = false
+  description = "The environment the resources will represent."
+  default     = "dev"
 }
 
 variable "location" {
-  default   = "East US 2"
-  sensitive = false
+  type        = string
+  sensitive   = false
+  description = "The Azure Region to which the resources will be deployed."
+  default     = "East US 2"
 }
 
 variable "app_name" {
-  type      = string
-  sensitive = false
+  type        = string
+  sensitive   = false
+  description = "The name of the application or workload these resources will represent."
+}
+
+variable "tags" {
+  type        = map(string)
+  sensitive   = false
+  description = "The set of tags to apply to the resources."
 }
 
 variable "github_organization_name" {
@@ -34,16 +45,16 @@ variable "github_bind_object" {
 
 variable "remote_state_storage_default_action" {
   type        = string
-  default     = "Allow"
   sensitive   = true
   description = "The Default Network posture of the remote state Storage Account."
+  default     = "Allow"
 }
 
 variable "remote_state_storage_ip_rules" {
   type        = list(any)
-  default     = []
   sensitive   = true
   description = "The list of IP's to allow to access the remote state Storage Account."
+  default     = []
 }
 
 variable "admin_user_principal_name" {

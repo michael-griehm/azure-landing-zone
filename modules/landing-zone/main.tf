@@ -23,19 +23,52 @@ resource "azurerm_resource_group" "rg" {
   location = var.location
 }
 
-resource "azuread_group" "group" {
-  display_name = "deployer-${var.app_name}-${var.env}-${local.loc}"
+resource "azuread_group" "deployer_group" {
+  display_name     = "deployer-${var.app_name}-${var.env}-${local.loc}"
+  security_enabled = true
+
   owners = [
     data.azurerm_client_config.current.object_id,
     data.azuread_user.admin.object_id
   ]
-  security_enabled = true
 }
 
-resource "azurerm_role_assignment" "role-assignment" {
+resource "azurerm_role_assignment" "deployer_group_role_assignment" {
   scope                = azurerm_resource_group.rg.id
   role_definition_name = "Owner"
-  principal_id         = azuread_group.group.object_id
+  principal_id         = azuread_group.deployer_group.object_id
+}
+
+resource "azuread_group" "contributor_group" {
+  display_name     = "contributor-${var.app_name}-${var.env}-${local.loc}"
+  security_enabled = true
+
+  owners = [
+    data.azurerm_client_config.current.object_id,
+    data.azuread_user.admin.object_id
+  ]
+}
+
+resource "azurerm_role_assignment" "contributor_group_role_assignment" {
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Contributor"
+  principal_id         = azuread_group.contributor_group.object_id
+}
+
+resource "azuread_group" "reader_group" {
+  display_name     = "reader-${var.app_name}-${var.env}-${local.loc}"
+  security_enabled = true
+
+  owners = [
+    data.azurerm_client_config.current.object_id,
+    data.azuread_user.admin.object_id
+  ]
+}
+
+resource "azurerm_role_assignment" "reader_group_role_assignment" {
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Reader"
+  principal_id         = azuread_group.reader_group.object_id
 }
 
 resource "azuread_application" "registration" {
@@ -46,7 +79,7 @@ resource "azuread_application" "registration" {
   ]
 
   required_resource_access {
-    resource_app_id = "00000003-0000-0000-c000-000000000000"  # MS Graph app id.
+    resource_app_id = "00000003-0000-0000-c000-000000000000" # MS Graph app id.
 
     resource_access {
       id   = "df021288-bdef-4463-88db-98f22de89214" # User.Read.All id.
@@ -77,7 +110,7 @@ resource "azuread_application_federated_identity_credential" "federation" {
 }
 
 resource "azuread_group_member" "group_member" {
-  group_object_id  = azuread_group.group.object_id
+  group_object_id  = azuread_group.deployer_group.object_id
   member_object_id = azuread_service_principal.service_principal.object_id
 }
 
@@ -90,6 +123,7 @@ resource "azurerm_key_vault" "vault" {
   soft_delete_retention_days  = 7
   purge_protection_enabled    = false
   sku_name                    = "standard"
+  tags                        = var.tags
 }
 
 resource "azurerm_key_vault_access_policy" "sp_acl" {
@@ -146,6 +180,7 @@ resource "azurerm_key_vault_secret" "stored_secret" {
   name         = azuread_application.registration.display_name
   value        = azuread_service_principal_password.secret.value
   key_vault_id = azurerm_key_vault.vault.id
+  tags         = var.tags
 
   depends_on = [
     azurerm_key_vault_access_policy.current_deployer_acl
@@ -162,6 +197,7 @@ resource "azurerm_storage_account" "remote_state" {
   min_tls_version           = "TLS1_2"
   access_tier               = "Hot"
   allow_blob_public_access  = false
+  tags                      = var.tags
 
   identity {
     type = "SystemAssigned"
@@ -177,6 +213,7 @@ resource "azurerm_key_vault_secret" "stored_remote_state_access" {
   name         = "${azurerm_storage_account.remote_state.name}-access-key"
   value        = azurerm_storage_account.remote_state.primary_access_key
   key_vault_id = azurerm_key_vault.vault.id
+  tags         = var.tags
 
   depends_on = [
     azurerm_key_vault_access_policy.current_deployer_acl
