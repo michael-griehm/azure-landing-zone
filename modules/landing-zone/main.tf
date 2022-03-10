@@ -79,10 +79,15 @@ resource "azuread_application" "registration" {
   ]
 
   required_resource_access {
-    resource_app_id = "00000003-0000-0000-c000-000000000000" # MS Graph app id.
+    resource_app_id = "00000003-0000-0000-c000-000000000000" # MS Graph API
 
     resource_access {
-      id   = "df021288-bdef-4463-88db-98f22de89214" # User.Read.All id.
+      id   = "df021288-bdef-4463-88db-98f22de89214" # User.Read.All
+      type = "Role"
+    }
+
+    resource_access {
+      id   = "62a82d76-70ea-41e2-9197-370581804d09" # Group.ReadWrite.All
       type = "Role"
     }
   }
