@@ -1,4 +1,4 @@
-name: deploy-adls
+name: destroy-adls
 on: 
   workflow_dispatch:
     inputs:
