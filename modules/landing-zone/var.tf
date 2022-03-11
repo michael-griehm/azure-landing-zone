@@ -65,6 +65,6 @@ variable "admin_user_principal_name" {
 
 variable "deployer_group_assignments" {
   type = list(string)
-  sensitive = true
+  sensitive = false
   description = "The Object ID of the other Azure AD Groups to which the Deployer Service Principal is assigned."
 }
