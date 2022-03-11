@@ -62,3 +62,9 @@ variable "admin_user_principal_name" {
   sensitive   = true
   description = "The user principal name of the admin for the app."
 }
+
+variable "deployer_group_assignments" {
+  type = list(string)
+  sensitive = true
+  description = "The Object ID of the other Azure AD Groups to which the Deployer Service Principal is assigned."
+}

@@ -20,4 +20,8 @@ module "data_brick_demo_landing_zone" {
     environment = "demo"
     workload    = "crypto-analytics"
   }
+
+  deployer_group_assignments = [ 
+    "b72189d3-d825-4400-8a5b-6877223ac6b4" # cryptoanalyticslake-stream-reader
+    ]
 }

@@ -230,3 +230,9 @@ resource "azurerm_storage_container" "remote_state_container" {
   storage_account_name  = azurerm_storage_account.remote_state.name
   container_access_type = "private"
 }
+
+resource "azuread_group_member" "deployer_group_memberships"{
+  for_each = toset(var.deployer_group_assignments)
+  group_object_id = each.value
+  member_object_id = azuread_service_principal.service_principal.object_id
+}
