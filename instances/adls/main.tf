@@ -9,7 +9,7 @@ terraform {
 
 module "data_brick_demo_landing_zone" {
   source                    = "../../modules/landing-zone"
-  app_name                  = "adls"
+  app_name                  = "adls2"
   github_organization_name  = "michael-griehm"
   github_repo_name          = "azure-data-lake"
   admin_user_principal_name = "mikeg@ish-star.com"
