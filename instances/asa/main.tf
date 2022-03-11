@@ -22,6 +22,6 @@ module "data_stream_landing_zone" {
   }
 
   deployer_group_assignments = [
-    "8aba9f00-e6ca-4067-b11c-9e52bdfd5893" # reader-adls2-demo-eastus2
+    "5b303900-0e57-4a2f-9c74-32c5f698ae00" # contributor-adls2-demo-eastus2
   ]
 }
