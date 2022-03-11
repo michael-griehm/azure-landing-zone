@@ -90,6 +90,16 @@ resource "azuread_application" "registration" {
       id   = "62a82d76-70ea-41e2-9197-370581804d09" # Group.ReadWrite.All
       type = "Role"
     }
+
+    # resource_access {
+    #   id = "18a4783c-866b-4cc7-a460-3d5e5662c884" # Application.ReadWrite.OwnedBy
+    #   type = "Role"
+    # }
+
+    # resource_access {
+    #   id = "9a5d68dd-52b0-4cc2-bd40-abcf44ac3a30" # Application.Read.All
+    #   type = "Role"
+    # }
   }
 }
 

@@ -20,4 +20,8 @@ module "data_stream_landing_zone" {
     environment = "demo"
     workload    = "crypto-analytics"
   }
+
+  deployer_group_assignments = [ 
+    "8aba9f00-e6ca-4067-b11c-9e52bdfd5893" # reader-adls2-demo-eastus2
+    ]
 }
