@@ -3,8 +3,8 @@ terraform {
     azuread = "~>2.16.0"
   }
 
-  backend "azurerm" {
-  }
+  # backend "azurerm" {
+  # }
 }
 
 module "data_brick_demo_landing_zone" {
@@ -20,4 +20,6 @@ module "data_brick_demo_landing_zone" {
     environment = "demo"
     workload    = "crypto-analytics"
   }
+
+  deployer_group_assignments = []
 }

@@ -20,4 +20,6 @@ module "data_brick_demo_landing_zone" {
     environment = "demo"
     workload    = "crypto-analytics"
   }
+
+  deployer_group_assignments = []
 }
