@@ -28,6 +28,11 @@ A 'landing zone' is a collection of Azure AD Groups and Resources needed for a d
 - [Workload Admin Azure AD User](modules/landing-zone/main.tf#L17)
   - Assigned Owner and other certain ACLs within the Landing Zone Azure Resources needed to help manage the development and deployment of the workload.
 
+## Repo Folder Structure
+
+- [./modules/landing-zone](modules/landing-zone/)
+  - Contains the Terraform files that represent the Landing Zone module.
+
 ## Microsoft Graph API Permission Ids
 
   $> az ad sp show --id 00000003-0000-0000-c000-000000000000 >microsoft_graph_permission_list.json
