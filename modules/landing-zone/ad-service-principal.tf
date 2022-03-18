@@ -19,7 +19,12 @@ resource "azuread_application" "registration" {
     }
 
     resource_access {
-      id = "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9" # Application.ReadWrite.All
+      id = "18a4783c-866b-4cc7-a460-3d5e5662c884" # Application.ReadWrite.OwnedBy
+      type = "Role"
+    }
+
+    resource_access {
+      id = "9a5d68dd-52b0-4cc2-bd40-abcf44ac3a30" # Application.Read.All
       type = "Role"
     }
   }
