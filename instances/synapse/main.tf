@@ -9,12 +9,13 @@ terraform {
 
 module "data_brick_demo_landing_zone" {
   source                    = "../../modules/landing-zone"
-  app_name                  = "synapse-da"
+  app_name                  = "synapse"
   github_organization_name  = "michael-griehm"
   github_repo_name          = "azure-synapse"
   admin_user_principal_name = "mikeg@ish-star.com"
   env                       = "demo"
   github_bind_object        = "ref:refs/heads/main"
+  location                  = "Central US"
 
   tags = {
     environment = "demo"
