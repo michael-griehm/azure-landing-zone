@@ -23,6 +23,6 @@ module "data_brick_demo_landing_zone" {
   }
 
   deployer_group_assignments = [
-    "5b303900-0e57-4a2f-9c74-32c5f698ae00" # contributor-adls2-demo-eastus2
+    "23a1465a-55cc-4229-a023-0cbd15034751" # contributor-adls2-demo-eastus2
   ]
 }

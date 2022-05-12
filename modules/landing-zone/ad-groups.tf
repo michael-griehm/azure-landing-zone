@@ -1,6 +1,7 @@
 resource "azuread_group" "deployer_group" {
   display_name     = "deployer-${var.app_name}-${var.env}-${local.loc}"
   security_enabled = true
+  prevent_duplicate_names = true
 
   owners = [
     data.azurerm_client_config.current.object_id,
@@ -17,6 +18,7 @@ resource "azurerm_role_assignment" "deployer_group_role_assignment" {
 resource "azuread_group" "contributor_group" {
   display_name     = "contributor-${var.app_name}-${var.env}-${local.loc}"
   security_enabled = true
+  prevent_duplicate_names = true
 
   owners = [
     data.azurerm_client_config.current.object_id,
@@ -33,6 +35,7 @@ resource "azurerm_role_assignment" "contributor_group_role_assignment" {
 resource "azuread_group" "reader_group" {
   display_name     = "reader-${var.app_name}-${var.env}-${local.loc}"
   security_enabled = true
+  prevent_duplicate_names = true
 
   owners = [
     data.azurerm_client_config.current.object_id,
