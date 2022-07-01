@@ -7,7 +7,7 @@ terraform {
   }
 }
 
-module "data_brick_demo_landing_zone" {
+module "networking_landing_zone" {
   source                    = "../../modules/landing-zone"
   app_name                  = "networking"
   github_organization_name  = "michael-griehm"
@@ -18,7 +18,7 @@ module "data_brick_demo_landing_zone" {
 
   tags = {
     environment = "demo"
-    workload    = "crypto-analytics"
+    workload    = "shared-services-networking"
   }
 
   deployer_group_assignments = []
