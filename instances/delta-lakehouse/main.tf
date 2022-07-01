@@ -7,11 +7,11 @@ terraform {
   }
 }
 
-module "networking_landing_zone" {
+module "delta_lakehouse_landing_zone" {
   source                    = "../../modules/landing-zone"
   app_name                  = "delta-lakehouse"
   github_organization_name  = "michael-griehm"
-  github_repo_name          = "azure-networking"
+  github_repo_name          = "azure-delta-lakehouse"
   admin_user_principal_name = "mikeg@ish-star.com"
   env                       = "demo"
   github_bind_object        = "ref:refs/heads/main"
