@@ -30,8 +30,11 @@ A 'landing zone' is a collection of Azure AD Groups and Resources needed for a d
 
 ## Repo Folder Structure
 
-- [./modules/landing-zone](modules/landing-zone/)
+- [./modules/landing-zone/](modules/landing-zone/)
   - Contains the Terraform files that represent the Landing Zone module.
+- [./instances/]
+  - Contains the usages of the Landing Zone module, note they are split out so only one instance per subfolder and deployment workflow file, thereby decoupling the management of the resources for different workloads to allow the different Landing Zones to be deployed and destroyed independently which prevents cross workload remote state corruption or interference.
+- 
 
 ## Microsoft Graph API Permission Ids
 
