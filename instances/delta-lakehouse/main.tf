@@ -7,21 +7,19 @@ terraform {
   }
 }
 
-module "data_brick_demo_landing_zone" {
+module "delta_lakehouse_landing_zone" {
   source                    = "../../modules/landing-zone"
-  app_name                  = "dbx"
+  app_name                  = "delta-lakehouse"
   github_organization_name  = "michael-griehm"
-  github_repo_name          = "azure-databricks"
+  github_repo_name          = "azure-delta-lakehouse"
   admin_user_principal_name = "mikeg@ish-star.com"
   env                       = "demo"
   github_bind_object        = "ref:refs/heads/main"
 
   tags = {
     environment = "demo"
-    workload    = "crypto-analytics"
+    workload    = "delta-lakehouse"
   }
 
-  deployer_group_assignments = [
-    "5b303900-0e57-4a2f-9c74-32c5f698ae00" # contributor-adls2-demo-eastus2
-  ]
+  deployer_group_assignments = []
 }

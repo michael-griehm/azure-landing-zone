@@ -30,11 +30,14 @@ A 'landing zone' is a collection of Azure AD Groups and Resources needed for a d
 
 ## Repo Folder Structure
 
-- [./modules/landing-zone/](modules/landing-zone/)
+- [modules/landing-zone](modules/landing-zone/)
   - Contains the Terraform files that represent the Landing Zone module.
-- [./instances/]
-  - Contains the usages of the Landing Zone module, note they are split out so only one instance per subfolder and deployment workflow file, thereby decoupling the management of the resources for different workloads to allow the different Landing Zones to be deployed and destroyed independently which prevents cross workload remote state corruption or interference.
-- 
+- [instances/](instances/)
+  - Contains subfolders for each of the Landing Zone instances managed by this repo.  Each Landing Zone subfolder contains the main.tf file that describes each implementation of the Landing Zone module.
+- [.github/workflows](.github/workflows/)
+  - Contains the GitHub Workflow files used to deploy and destroy each of the Landing Zone instances.  There is one deploy file and one destroy file (seperate files) for each of the Landing Zone instances.  This is done to decouple the deployment and Terraform remote state files of each Landing Zone from one another as a risk mitigation strategy as well as an agility strategy.
+- [iac-bootstrap](iac-bootstrap/)
+  - Solution to the chicken and the egg paradox when it comes to Terraform remote state management when using cloud provider resources to house the remote state file.  The Terraform file and PowerShell code in here are used to create the Landing Zone's own Resource Group, Terraform Remote State Storage Account, Deployer Key Vault, and Deployer Service Principal.  The PowerShell code was executed by a Subscription Owner persona locally to seed the resources needed to setup a enterprise grade deployment model.
 
 ## Microsoft Graph API Permission Ids
 
