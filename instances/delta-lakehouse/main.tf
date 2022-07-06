@@ -21,5 +21,7 @@ module "delta_lakehouse_landing_zone" {
     workload    = "delta-lakehouse"
   }
 
-  deployer_group_assignments = []
+  deployer_group_assignments = [
+    "e2ed205f-16d0-4ebc-85c6-93ecbea6f79e" # reader-networking-demo-eastus2
+  ]
 }
