@@ -22,6 +22,6 @@ module "delta_lakehouse_landing_zone" {
   }
 
   deployer_group_assignments = [
-    "e2ed205f-16d0-4ebc-85c6-93ecbea6f79e" # reader-networking-demo-eastus2
+    "c85ffe94-a507-46c4-b8f4-84c6cdd346e7" # contributor-networking-demo-eastus2
   ]
 }
